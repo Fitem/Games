@@ -12,10 +12,9 @@ public class AppApplication extends BaseApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-
-        // 设置本地化语言
-        I18NHelper.setLocale(this);
         // Utils工具初始化
         Utils.init(this);
+        // 设置本地化语言, 需要在Utils之后，因为用到LogUtils，否则会报：ExceptionInInitializerError
+        I18NHelper.setLocale(this);
     }
 }

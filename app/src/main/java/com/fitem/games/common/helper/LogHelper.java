@@ -9,6 +9,7 @@ import com.fitem.games.app.AppConstants;
  */
 
 public class LogHelper {
+
     /* 设置log开关，仅在DEBUG模式下显示 */
     static {
         LogUtils.Config config = LogUtils.getConfig();
@@ -22,5 +23,9 @@ public class LogHelper {
 
     public static void logdTag(String tag, String contents) {
         LogUtils.dTag(tag, contents);
+    }
+
+    public static void loge(String contents) {
+        LogUtils.e(contents);
     }
 }

@@ -13,7 +13,7 @@ import android.webkit.WebView;
 
 import com.fitem.games.app.AppApplication;
 import com.fitem.games.app.AppConstants;
-import com.fitem.games.ui.main.MainActivity;
+import com.fitem.games.ui.main.activity.MainActivity;
 
 import java.util.Locale;
 
