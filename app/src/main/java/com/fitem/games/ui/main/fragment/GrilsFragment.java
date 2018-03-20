@@ -64,7 +64,7 @@ public class GrilsFragment extends BaseFragment<GrilsPresenter, GrilsModel> impl
 
     @Override
     protected void lazyFetchData() {
-        pg = 0;
+        pg = 1;
         mPresenter.getGrilsListPresenter(pg);
     }
 
@@ -119,7 +119,7 @@ public class GrilsFragment extends BaseFragment<GrilsPresenter, GrilsModel> impl
             swipeRefreshLayout.setRefreshing(false);
         }
         grilsAdapter.setEnableLoadMore(true);
-        boolean isFirst = pg == 0;
+        boolean isFirst = pg == 1;
         if (list == null) {
 
         } else if (isFirst) {

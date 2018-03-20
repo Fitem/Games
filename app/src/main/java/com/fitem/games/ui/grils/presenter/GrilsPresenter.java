@@ -15,7 +15,7 @@ import io.reactivex.disposables.Disposable;
 public class GrilsPresenter extends GrilsContract.Presenter {
     @Override
     public void getGrilsListPresenter(int pg) {
-        boolean isFirst = pg == 0;
+        boolean isFirst = pg == 1;
         if (isFirst) mView.showLoading();
         mModel.getGrilsList(pg).subscribe(new RxSubscriber<List<Grils.ResultsBean>>(mContext, false) {
             @Override
