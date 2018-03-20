@@ -20,4 +20,7 @@ public class AppConstants {
     public static final int SERVER_EXCEPTION = -1;
     public static final int OHTER_EXCEPTION = -2;
     public static final int PAGE_SIZE = 20;
+    public static final String NEWS_ID = "news_id";
+    public static final String HTML_IMG_TEMPALE = "<img src=\"http\" />";
+    public static final String NEWS_TITLE = "news_title";
 }

@@ -4,6 +4,7 @@ import com.blankj.utilcode.util.Utils;
 import com.fitem.games.common.baseapp.BaseApplication;
 import com.fitem.games.common.helper.I18NHelper;
 import com.pgyersdk.crash.PgyCrashManager;
+import com.zzhoujay.richtext.RichText;
 
 /**
  * Created by Fitem on 2018/3/16.

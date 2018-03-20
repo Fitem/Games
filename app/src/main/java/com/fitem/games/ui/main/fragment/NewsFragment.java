@@ -1,5 +1,6 @@
 package com.fitem.games.ui.main.fragment;
 
+import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,8 +12,10 @@ import com.fitem.games.app.AppConstants;
 import com.fitem.games.common.base.BaseFragment;
 import com.fitem.games.common.commonwidget.DividerItemDecoration;
 import com.fitem.games.common.commonwidget.LoadingTip;
+import com.fitem.games.ui.news.activity.NewsDetailActivity;
 import com.fitem.games.ui.news.adapter.NewsAdapter;
 import com.fitem.games.ui.news.bean.GNews;
+import com.fitem.games.ui.news.bean.GNewsDetail;
 import com.fitem.games.ui.news.bean.News;
 import com.fitem.games.ui.news.contract.NewsContract;
 import com.fitem.games.ui.news.model.NewsModel;
@@ -77,8 +80,13 @@ public class NewsFragment extends BaseFragment<NewsPresenter, NewsModel> impleme
         newsAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                String docid = newsAdapter.getData().get(position).getDocid();
-
+                GNews news = newsAdapter.getData().get(position);
+                String title = news.getTitle();
+                String docid = news.getDocid();
+                Bundle bundle = new Bundle();
+                bundle.putString(AppConstants.NEWS_ID, docid);
+                bundle.putString(AppConstants.NEWS_TITLE, title);
+                startActivity(NewsDetailActivity.class, bundle);
             }
         });
     }
@@ -139,6 +147,11 @@ public class NewsFragment extends BaseFragment<NewsPresenter, NewsModel> impleme
             newsAdapter.loadMoreComplete();
             offset = newsAdapter.getData().size();
         }
+    }
+
+    @Override
+    public void returnNewsDetails(GNewsDetail gNewsDetail) {
+
     }
 
     @Override
