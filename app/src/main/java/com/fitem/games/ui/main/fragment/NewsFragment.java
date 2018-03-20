@@ -5,6 +5,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.fitem.games.R;
@@ -32,6 +33,8 @@ import butterknife.OnClick;
 
 public class NewsFragment extends BaseFragment<NewsPresenter, NewsModel> implements SwipeRefreshLayout.OnRefreshListener, NewsContract.View, BaseQuickAdapter.RequestLoadMoreListener {
 
+    @BindView(R.id.tv_title)
+    TextView titleView;
     @BindView(R.id.rv_list)
     RecyclerView recyclerView;
     @BindView(R.id.swipeLayout)
@@ -65,9 +68,14 @@ public class NewsFragment extends BaseFragment<NewsPresenter, NewsModel> impleme
 
     @Override
     protected void initView() {
+        initTitle();
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
         swipeRefreshLayout.setOnRefreshListener(this);
         initNewsAdapter();
+    }
+
+    private void initTitle() {
+        titleView.setText(R.string.news);
     }
 
     private void initNewsAdapter() {

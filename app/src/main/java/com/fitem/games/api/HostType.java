@@ -15,6 +15,6 @@ public class HostType {
      */
     public static final int HOST = 1;
 
-    public static final int BSPAY = 2;
+    public static final int GRILS_HOST = 2;
 
 }

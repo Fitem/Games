@@ -11,4 +11,5 @@
     <color name="text_title">#242424</color>
     <color name="text_content">#424242</color>
     <color name="line">#d4d4d4</color>
+    <color name="card_bg">#eae2e2</color>
 </resources>

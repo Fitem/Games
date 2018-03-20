@@ -16,6 +16,12 @@ public class ApiConstants {
     public static final String NEWS_GAMES_TYPE = "T1348654151579";
     public static final String NEWS_HOT_TYPE = "T1348647909107";
 
+    /**
+     * 美女图片
+     * http://gank.io/api/data/%E7%A6%8F%E5%88%A9/10/1
+     */
+
+    public static final String GRILS_HOST = "http://gank.io/api/data/%E7%A6%8F%E5%88%A9/";
 
     /**
      * 获取对应的host
@@ -29,8 +35,8 @@ public class ApiConstants {
             case HostType.HOST:
                 URL = NEWS_HOST;
                 break;
-            case HostType.BSPAY:
-
+            case HostType.GRILS_HOST:
+                URL = GRILS_HOST;
                 break;
         }
         return URL;

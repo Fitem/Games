@@ -68,4 +68,6 @@ dependencies {
     implementation 'com.pgyersdk:sdk:2.8.1'
     // 富文本
     implementation 'com.zzhoujay.richtext:richtext:3.0.5'
+    // photoView
+    implementation 'com.github.chrisbanes:PhotoView:2.1.3'
 }

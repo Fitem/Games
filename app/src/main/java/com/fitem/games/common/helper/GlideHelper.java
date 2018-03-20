@@ -1,10 +1,17 @@
 package com.fitem.games.common.helper;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
+import android.support.annotation.Nullable;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.fitem.games.R;
 
 
@@ -21,6 +28,40 @@ public class GlideHelper {
                 .placeholder(R.mipmap.ic_news_prepare)
                 .error(R.mipmap.ic_news_prepare)
                 .centerCrop()
+//                .crossFade()
+                .dontAnimate()
+                .into(view);
+    }
+
+    // 加载美女图片
+    public static void loadGrilsPic(Context context, String url, final ImageView view) {
+        GlideApp.with(context).load(url)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                .placeholder(R.mipmap.ic_news_prepare)
+                .error(R.mipmap.ic_news_prepare)
+                .listener(new RequestListener<Drawable>() {
+                    @Override
+                    public boolean onLoadFailed(@Nullable GlideException e, Object model, Target<Drawable> target, boolean isFirstResource) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onResourceReady(Drawable resource, Object model, Target<Drawable> target, DataSource dataSource, boolean isFirstResource) {
+                        if (view == null) {
+                            return false;
+                        }
+                        if (view.getScaleType() != ImageView.ScaleType.FIT_XY) {
+                            view.setScaleType(ImageView.ScaleType.FIT_XY);
+                        }
+                        ViewGroup.LayoutParams params = view.getLayoutParams();
+                        int vw = view.getWidth() - view.getPaddingLeft() - view.getPaddingRight();
+                        float scale = (float) vw / (float) resource.getIntrinsicWidth();
+                        int vh = Math.round(resource.getIntrinsicHeight() * scale);
+                        params.height = vh + view.getPaddingTop() + view.getPaddingBottom();
+                        view.setLayoutParams(params);
+                        return false;
+                    }
+                })
 //                .crossFade()
                 .dontAnimate()
                 .into(view);
