@@ -10,7 +10,7 @@ import com.fitem.games.common.base.BaseFragment;
 public class LiveFragment extends BaseFragment {
     @Override
     protected int getLayoutResource() {
-        return R.layout.fragment_news;
+        return R.layout.fragment_live;
     }
 
     @Override
@@ -22,4 +22,10 @@ public class LiveFragment extends BaseFragment {
     protected void initView() {
 
     }
+
+    @Override
+    protected boolean isHideFragment() {
+        return true;
+    }
+
 }

@@ -56,10 +56,14 @@ dependencies {
     // butterknife
     implementation 'com.jakewharton:butterknife:8.8.1'
     annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
-    //分包
+    // 分包
     implementation 'com.android.support:multidex:1.0.0'
     // utilcode
     implementation 'com.blankj:utilcode:1.13.4'
-    //菜单栏
+    // 菜单栏
     implementation 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
+    // BRVAH
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
+    // pgyer
+    implementation 'com.pgyersdk:sdk:2.8.1'
 }

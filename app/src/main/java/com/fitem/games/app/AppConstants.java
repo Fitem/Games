@@ -15,4 +15,9 @@ public class AppConstants {
     public static final String GRILS = "grils";
     public static final String MINE = "mine";
     public static final String HOME_CURRENT_TAB_POSITION = "home_current_tab_position";
+    /* 网络TAG */
+    public static final int NO_NET = 0;
+    public static final int SERVER_EXCEPTION = -1;
+    public static final int OHTER_EXCEPTION = -2;
+    public static final int PAGE_SIZE = 20;
 }

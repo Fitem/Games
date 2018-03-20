@@ -177,7 +177,7 @@
 -keep class com.zsft.thai.ui.main.model.** { *; }
 -keep class com.zsft.thai.ui.guess.model.** { *; }
 -keep class com.zsft.thai.ui.mine.model.** { *; }
--keep class com.zsft.thai.ui.news.model.** { *; }
+-keep class com.zsft.thai.ui.GNews.model.** { *; }
 -keep class com.zsft.thai.ui.score.model.** { *; }
 -keep class com.zsft.thai.ui.rec.model.** { *; }
 -keep class com.zsft.thai.ui.chat.model.** { *; }
@@ -255,14 +255,15 @@
 -keep class com.google.gson.stream.** { *; }
 # 使用Gson时需要配置Gson的解析对象及变量都不混淆。不然Gson会找不到变量。
 # 将下面替换成自己的实体类
--keep class com.zsft.thai.bean.** { *; }
--keep class com.zsft.thai.ui.guess.bean.** { *; }
--keep class com.zsft.thai.ui.main.bean.** { *; }
--keep class com.zsft.thai.ui.mine.bean.** { *; }
--keep class com.zsft.thai.ui.news.bean.** { *; }
--keep class com.zsft.thai.ui.score.bean.** { *; }
--keep class com.zsft.thai.ui.rec.bean.** { *; }
--keep class com.zsft.thai.ui.chat.bean.** { *; }
+#-keep class com.zsft.thai.bean.** { *; }
+#-keep class com.zsft.thai.ui.guess.bean.** { *; }
+#-keep class com.zsft.thai.ui.main.bean.** { *; }
+#-keep class com.zsft.thai.ui.mine.bean.** { *; }
+#-keep class com.zsft.thai.ui.GNews.bean.** { *; }
+#-keep class com.zsft.thai.ui.score.bean.** { *; }
+#-keep class com.zsft.thai.ui.rec.bean.** { *; }
+#-keep class com.zsft.thai.ui.chat.bean.** { *; }
+-keep interface com.fitem.games.common.base.BaseView {*;}
 
 # FastJson
 -dontwarn com.alibaba.fastjson.**
@@ -285,9 +286,12 @@
 -keep class com.ut.*
 
 # OkHttp
--keep class com.squareup.okhttp.** { *; }
--keep interface com.squareup.okhttp.** { *; }
--dontwarn com.squareup.okhttp.**
+-dontwarn okhttp3.**
+-dontwarn okio.**
+-dontwarn javax.annotation.**
+-dontwarn org.conscrypt.**
+# A resource is loaded with a relative path so the package of this class must be preserved.
+-keepnames class okhttp3.internal.publicsuffix.PublicSuffixDatabase
 
 # OkHttp3
 -dontwarn com.squareup.okhttp3.**
@@ -300,10 +304,14 @@
 -dontwarn javax.annotation.ParametersAreNonnullByDefault
 
 # Retrofit
--dontwarn retrofit2.**
--keep class retrofit2.** { *; }
+# Retain generic type information for use by reflection by converters and adapters.
 -keepattributes Signature
--keepattributes Exceptions
+# Retain service method parameters.
+-keepclassmembernames,allowobfuscation interface * {
+    @retrofit2.http.* <methods>;
+}
+# Ignore annotation used for build tooling.
+-dontwarn org.codehaus.mojo.animal_sniffer.IgnoreJRERequirement
 
 # RxJava RxAndroid
 -dontwarn sun.misc.**
@@ -333,7 +341,12 @@
 
 # BaseRecyclerViewAdapterHelper
 -keep class com.chad.library.adapter.** {
-   *;
+*;
+}
+-keep public class * extends com.chad.library.adapter.base.BaseQuickAdapter
+-keep public class * extends com.chad.library.adapter.base.BaseViewHolder
+-keepclassmembers  class **$** extends com.chad.library.adapter.base.BaseViewHolder {
+     <init>(...);
 }
 
 # AndroidUtilCode
@@ -380,6 +393,11 @@
 
 # 谷歌支付
 -keep class com.android.vending.billing.**
+
+# pgyer
+-libraryjars libs/pgyer_sdk_x.x.jar
+-dontwarn com.pgyersdk.**
+-keep class com.pgyersdk.** { *; }
 
 # 相当于无混淆
 #  -ignorewarnings

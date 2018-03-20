@@ -10,7 +10,7 @@ import com.fitem.games.common.base.BaseFragment;
 public class MineFragment extends BaseFragment {
     @Override
     protected int getLayoutResource() {
-        return R.layout.fragment_news;
+        return R.layout.fragment_mine;
     }
 
     @Override
@@ -22,4 +22,10 @@ public class MineFragment extends BaseFragment {
     protected void initView() {
 
     }
+
+    @Override
+    protected boolean isHideFragment() {
+        return true;
+    }
+
 }

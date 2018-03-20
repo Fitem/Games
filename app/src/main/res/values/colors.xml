@@ -3,4 +3,12 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="tab_selected_text">#FF4081</color>
+    <color name="tab_unselect_text">#007de3</color>
+    <color name="gravy">#808080</color>
+    <color name="text_title">#242424</color>
+    <color name="text_content">#424242</color>
+    <color name="line">#d4d4d4</color>
 </resources>

@@ -26,21 +26,21 @@ public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel>
     public E mModel;
     public RxManager mRxManager;
 
-    private boolean isViewPrepared; // 标识fragment视图已经初始化完毕
-    private boolean hasFetchData; // 标识已经触发过懒加载数据
-    private long loadStartTime;
-
+    private boolean isViewPrepared;     // 标识fragment视图已经初始化完毕
+    private boolean hasFetchData;       // 标识已经触发过懒加载数据
+    private boolean isHideShow;  // 标识是否hide状态, 默认是true兼容fragment Hide生命周期
+    private boolean isHideFragment;     // 是否是Hide Fragment
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null)
             rootView = inflater.inflate(getLayoutResource(), container, false);
-
         ViewGroup parent = (ViewGroup) rootView.getParent();
         if (parent != null) {
             parent.removeView(rootView);
         }
+        isHideFragment = isHideFragment();
 
         mRxManager = new RxManager();
         ButterKnife.bind(this, rootView);
@@ -78,19 +78,29 @@ public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel>
         }
     }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        isHideShow = !hidden;
+        lazyFetchDataIfPrepared();
+    }
+
     /**
      * 懒加载
      */
     private void lazyFetchDataIfPrepared() {
+        boolean isShow = !isHideFragment || isHideShow; // 不走hide 或者 hide 显示
         // 用户可见fragment && 没有加载过数据 && 视图已经准备完毕
-        if (getUserVisibleHint() && !hasFetchData && isViewPrepared) {
+        if (isShow && getUserVisibleHint() && !hasFetchData && isViewPrepared) {
             hasFetchData = true;
-            loadStartTime = System.currentTimeMillis();
             lazyFetchData();
-        } else if(getUserVisibleHint() && hasFetchData && isViewPrepared) {
+        } else if (isShow && getUserVisibleHint() && hasFetchData && isViewPrepared) {
             updateSection();
         }
+    }
 
+    protected boolean isHideFragment() {
+        return false;
     }
 
     /**
@@ -101,15 +111,11 @@ public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel>
     }
 
     /**
-     *用于统计点位
+     * 用于统计点位
      */
     protected void updateSection() {
 
     }
-
-    public long getLoadStartTime() {
-        return loadStartTime;
-    };
 
     /**
      * 通过Class跳转界面
@@ -153,7 +159,10 @@ public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel>
     @Override
     public void onResume() {
         super.onResume();
-        //此处的统计放到懒加载中
+        boolean isShow = !isHideFragment || isHideShow; // 不走hide 或者 hide 显示
+        if (isShow && getUserVisibleHint() && hasFetchData && isViewPrepared) { //考虑Fragment上弹窗情况
+            updateSection();
+        }
     }
 
     @Override
@@ -171,6 +180,4 @@ public abstract class BaseFragment<T extends BasePresenter, E extends BaseModel>
         hasFetchData = false;
         isViewPrepared = false;
     }
-
-
 }

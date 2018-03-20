@@ -10,7 +10,7 @@ import com.fitem.games.common.base.BaseFragment;
 public class GrilsFragment extends BaseFragment {
     @Override
     protected int getLayoutResource() {
-        return R.layout.fragment_news;
+        return R.layout.fragment_grils;
     }
 
     @Override
@@ -22,4 +22,11 @@ public class GrilsFragment extends BaseFragment {
     protected void initView() {
 
     }
+
+    @Override
+    protected boolean isHideFragment() {
+        return true;
+    }
+
+
 }
