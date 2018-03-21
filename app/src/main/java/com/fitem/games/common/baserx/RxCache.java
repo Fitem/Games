@@ -2,7 +2,7 @@ package com.fitem.games.common.baserx;
 
 import android.content.Context;
 
-import com.fitem.games.common.commonutils.ACache;
+import com.fitem.games.common.utils.ACache;
 
 import java.io.Serializable;
 

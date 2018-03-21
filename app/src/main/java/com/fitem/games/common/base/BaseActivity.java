@@ -12,8 +12,8 @@ import android.view.Window;
 import com.fitem.games.R;
 import com.fitem.games.common.baseapp.AppManager;
 import com.fitem.games.common.baserx.RxManager;
-import com.fitem.games.common.commonutils.TUtil;
-import com.fitem.games.common.commonwidget.StatusBarCompat;
+import com.fitem.games.common.utils.TUtil;
+import com.fitem.games.common.widget.StatusBarCompat;
 import com.fitem.games.common.helper.I18NHelper;
 
 import butterknife.ButterKnife;

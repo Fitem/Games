@@ -14,7 +14,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.fitem.games.R;
 import com.fitem.games.app.AppConstants;
 import com.fitem.games.common.base.BaseFragment;
-import com.fitem.games.common.commonwidget.LoadingTip;
+import com.fitem.games.common.widget.LoadingTip;
 import com.fitem.games.ui.grils.activity.GrilsActivity;
 import com.fitem.games.ui.grils.adapter.GrilsAdapter;
 import com.fitem.games.ui.grils.bean.Grils;

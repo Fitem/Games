@@ -1,7 +1,7 @@
 /*
  * 
  */
-package com.fitem.games.common.commonutils;
+package com.fitem.games.common.utils;
 
 import android.annotation.SuppressLint;
 import android.text.TextUtils;

@@ -1,16 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_content"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/black_gray"
     android:orientation="vertical">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        app:popupTheme="@style/AppTheme.PopupOverlay">
 
-    <com.github.chrisbanes.photoview.PhotoView
-        android:id="@+id/photo_view"
-        android:scaleType="fitCenter"
+        <include layout="@layout/grils_detail_title" />
+    </android.support.v7.widget.Toolbar>
+
+    <com.fitem.games.common.widget.PullBackLayout
+        android:id="@+id/pull_back_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:transitionName="@string/transition_grils"
-        tools:targetApi="lollipop" />
+        android:layout_gravity="center">
+
+        <com.github.chrisbanes.photoview.PhotoView
+            android:id="@+id/photo_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scaleType="fitCenter"
+            android:transitionName="@string/transition_grils"
+            tools:targetApi="lollipop" />
+        <!--使用PhotoView，共享动画不平滑-->
+    </com.fitem.games.common.widget.PullBackLayout>
 </LinearLayout>

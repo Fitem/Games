@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.fitem.games.common.baserx.RxManager;
-import com.fitem.games.common.commonutils.TUtil;
+import com.fitem.games.common.utils.TUtil;
 
 import butterknife.ButterKnife;
 

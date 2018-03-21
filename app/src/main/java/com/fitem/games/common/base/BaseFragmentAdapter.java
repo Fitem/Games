@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentTransaction;
 
-import com.fitem.games.common.commonutils.CollectionUtils;
+import com.fitem.games.common.utils.CollectionUtils;
 
 import java.util.ArrayList;
 import java.util.List;

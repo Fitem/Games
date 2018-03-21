@@ -7,9 +7,10 @@
     <color name="white">#FFFFFF</color>
     <color name="tab_selected_text">#FF4081</color>
     <color name="tab_unselect_text">#007de3</color>
-    <color name="gravy">#808080</color>
+    <color name="gray">#808080</color>
     <color name="text_title">#242424</color>
     <color name="text_content">#424242</color>
     <color name="line">#d4d4d4</color>
     <color name="card_bg">#eae2e2</color>
+    <color name="black_gray">#201d1d</color>
 </resources>

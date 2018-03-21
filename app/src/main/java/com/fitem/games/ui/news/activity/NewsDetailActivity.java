@@ -6,7 +6,7 @@ import android.widget.TextView;
 import com.fitem.games.R;
 import com.fitem.games.app.AppConstants;
 import com.fitem.games.common.base.BaseActivity;
-import com.fitem.games.common.commonwidget.LoadingTip;
+import com.fitem.games.common.widget.LoadingTip;
 import com.fitem.games.ui.news.bean.GNewsDetail;
 import com.fitem.games.ui.news.bean.News;
 import com.fitem.games.ui.news.contract.NewsContract;

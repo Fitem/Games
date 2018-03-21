@@ -7,7 +7,7 @@ import android.util.SparseArray;
 
 import com.fitem.games.BuildConfig;
 import com.fitem.games.common.baseapp.BaseApplication;
-import com.fitem.games.common.commonutils.NetWorkUtils;
+import com.fitem.games.common.utils.NetWorkUtils;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 

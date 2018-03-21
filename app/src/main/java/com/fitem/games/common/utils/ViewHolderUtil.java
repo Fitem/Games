@@ -1,4 +1,4 @@
-package com.fitem.games.common.commonutils;
+package com.fitem.games.common.utils;
 
 import android.util.SparseArray;
 import android.view.View;

@@ -36,7 +36,8 @@
             android:theme="@style/SplashTheme" />
 
         <activity android:name=".ui.news.activity.NewsDetailActivity" />
-        <activity android:name=".ui.grils.activity.GrilsActivity" />
+        <activity android:name=".ui.grils.activity.GrilsActivity"
+            android:theme="@style/TranslucentTheme"/>
 
         <!-- 必选-->
         <meta-data

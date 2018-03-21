@@ -42,7 +42,7 @@
 
         </android.support.v4.widget.NestedScrollView>
 
-        <com.fitem.games.common.commonwidget.LoadingTip
+        <com.fitem.games.common.widget.LoadingTip
             android:id="@+id/loading_tip"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

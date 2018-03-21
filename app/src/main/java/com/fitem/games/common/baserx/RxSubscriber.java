@@ -5,8 +5,8 @@ import android.content.Context;
 
 import com.fitem.games.R;
 import com.fitem.games.app.AppConstants;
-import com.fitem.games.common.commonutils.NetWorkUtils;
-import com.fitem.games.common.commonwidget.LoadingDialog;
+import com.fitem.games.common.utils.NetWorkUtils;
+import com.fitem.games.common.widget.LoadingDialog;
 
 import io.reactivex.Observer;
 

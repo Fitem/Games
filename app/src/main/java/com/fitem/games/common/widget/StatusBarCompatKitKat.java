@@ -1,4 +1,4 @@
-package com.fitem.games.common.commonwidget;
+package com.fitem.games.common.widget;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
