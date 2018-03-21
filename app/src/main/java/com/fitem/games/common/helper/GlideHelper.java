@@ -3,6 +3,7 @@ package com.fitem.games.common.helper;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.Nullable;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -25,14 +26,7 @@ public class GlideHelper {
 
     // 加载新闻图片
     public static void loadNewsPic(Context context, String url, ImageView view) {
-        GlideApp.with(context).load(url)
-                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                .placeholder(R.mipmap.ic_news_prepare)
-                .error(R.mipmap.ic_news_prepare)
-                .centerCrop()
-//                .crossFade()
-                .dontAnimate()
-                .into(view);
+        loadPic(context, url, view, R.mipmap.ic_news_prepare);
     }
 
     // 加载美女图片
@@ -84,10 +78,27 @@ public class GlideHelper {
 
     // 加载用户头像
     public static void loadUserPic(Context context, String url, ImageView view) {
+        loadCirclePic(context, url, view, R.mipmap.visitor_picture);
+    }
+
+    // 加载图片
+    public static void loadPic(Context context, String url, ImageView view, @DrawableRes int placeId) {
         GlideApp.with(context).load(url)
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                .placeholder(R.mipmap.visitor_picture)
-                .error(R.mipmap.visitor_picture)
+                .placeholder(placeId)
+                .error(placeId)
+                .centerCrop()
+//                .crossFade()
+                .dontAnimate()
+                .into(view);
+    }
+
+    // 加载圆图
+    public static void loadCirclePic(Context context, String url, ImageView view, @DrawableRes int placeId) {
+        GlideApp.with(context).load(url)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                .placeholder(placeId)
+                .error(placeId)
                 .apply(RequestOptions.circleCropTransform())
 //                .centerCrop()
 //                .crossFade()

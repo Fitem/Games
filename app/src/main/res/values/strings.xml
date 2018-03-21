@@ -15,4 +15,9 @@
     <string name="click_reloading">点击重新加载</string>
     <string name="loading_error">加载错误，请重试！</string>
     <string name="transition_grils">transition_grils</string>
+    <string name="lol">英雄联盟</string>
+    <string name="ow">守望先锋</string>
+    <string name="hs">炉石传说</string>
+    <string name="data2">DOTA2</string>
+    <string name="csgo">CSGO</string>
 </resources>

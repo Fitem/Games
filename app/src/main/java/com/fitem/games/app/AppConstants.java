@@ -24,4 +24,11 @@ public class AppConstants {
     public static final String HTML_IMG_TEMPALE = "<img src=\"http\" />";
     public static final String NEWS_TITLE = "news_title";
     public static final String GRILS_URL = "grils_url";
+    /* 直播 */
+    public static final String GAME_TYPE = "game_type";
+    public static final String LOL = "lol";
+    public static final String OW = "ow";
+    public static final String HS = "hs";
+    public static final String DATA2 = "data2";
+    public static final String CSGO = "csgo";
 }

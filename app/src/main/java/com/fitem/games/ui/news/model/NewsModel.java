@@ -21,13 +21,13 @@ import io.reactivex.functions.Function;
 public class NewsModel implements NewsContract.Model {
     @Override
     public Observable<News> getNews(int offset) {
-        return Api.getDefault(HostType.HOST).getNewsList(ApiConstants.NEWS_GAMES_TYPE, offset, AppConstants.PAGE_SIZE)
+        return Api.getDefault(HostType.NEWS_HOST).getNewsList(ApiConstants.NEWS_GAMES_TYPE, offset, AppConstants.PAGE_SIZE)
                 .compose(RxSchedulers.<News>io_main());
     }
 
     @Override
     public Observable<GNewsDetail> getNewsDetails(final String newsId) {
-        return Api.getDefault(HostType.HOST).getNewsDetail(newsId).map(new Function<ArrayMap<String, GNewsDetail>, GNewsDetail>() {
+        return Api.getDefault(HostType.NEWS_HOST).getNewsDetail(newsId).map(new Function<ArrayMap<String, GNewsDetail>, GNewsDetail>() {
             @Override
             public GNewsDetail apply(ArrayMap<String, GNewsDetail> map) throws Exception {
                 GNewsDetail newsDetail = map.get(newsId);

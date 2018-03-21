@@ -3,12 +3,17 @@ package com.fitem.games.api;
 import android.support.v4.util.ArrayMap;
 
 import com.fitem.games.ui.grils.bean.Grils;
+import com.fitem.games.ui.live.bean.LiveBase;
+import com.fitem.games.ui.live.bean.LiveItem;
 import com.fitem.games.ui.news.bean.GNewsDetail;
 import com.fitem.games.ui.news.bean.News;
+
+import java.util.List;
 
 import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * des:ApiService
@@ -33,5 +38,13 @@ public interface ApiService {
     Observable<Grils> getGrilsPic(
             @Path("page_size") int ps,
             @Path("page") int pg
+    );
+
+    @GET("list")
+    Observable<LiveBase<List<LiveItem>>> getLiveList(
+            @Query("live_type") String liveType,
+            @Query("game_type") String gameType,
+            @Query("offset") int offset,
+            @Query("limit") int limit
     );
 }

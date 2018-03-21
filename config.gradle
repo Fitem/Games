@@ -1,10 +1,10 @@
 ext {
     android = [
-            applicationId: "com.fitem.games",
+            applicationId    : "com.fitem.games",
             compileSdkVersion: 26,
             minSdkVersion    : 16,
             targetSdkVersion : 26,
-            versionCode      : 3,
+            versionCode      : 5,
             versionName      : "1.0.1",
             buildToolsVersion: "26.1.0"
     ]

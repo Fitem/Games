@@ -24,6 +24,14 @@ public class ApiConstants {
     public static final String GRILS_HOST = "http://gank.io/api/data/%E7%A6%8F%E5%88%A9/";
 
     /**
+     * TYPE: lol、dnf、pubg
+     * http://api.maxjia.com/api/live/list/?offset=0&limit=20&live_type=&game_type=lol
+     * http://api.maxjia.com/api/live/detail/?live_type=quanmin&live_id=666&game_type=lol
+     */
+
+    public static final String LIVE_HOST = "http://api.maxjia.com/api/live/";
+
+    /**
      * 获取对应的host
      *
      * @param hostType host类型
@@ -32,11 +40,14 @@ public class ApiConstants {
     public static String getHost(int hostType) {
         String URL = NEWS_HOST;
         switch (hostType) {
-            case HostType.HOST:
+            case HostType.NEWS_HOST:
                 URL = NEWS_HOST;
                 break;
             case HostType.GRILS_HOST:
                 URL = GRILS_HOST;
+                break;
+            case HostType.LIVE_HOST:
+                URL = LIVE_HOST;
                 break;
         }
         return URL;
