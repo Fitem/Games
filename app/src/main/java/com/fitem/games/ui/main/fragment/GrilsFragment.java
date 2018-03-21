@@ -1,8 +1,13 @@
 package com.fitem.games.ui.main.fragment;
 
+import android.content.Intent;
+import android.os.Build;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.view.View;
 import android.widget.TextView;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -10,6 +15,7 @@ import com.fitem.games.R;
 import com.fitem.games.app.AppConstants;
 import com.fitem.games.common.base.BaseFragment;
 import com.fitem.games.common.commonwidget.LoadingTip;
+import com.fitem.games.ui.grils.activity.GrilsActivity;
 import com.fitem.games.ui.grils.adapter.GrilsAdapter;
 import com.fitem.games.ui.grils.bean.Grils;
 import com.fitem.games.ui.grils.contract.GrilsContract;
@@ -59,7 +65,7 @@ public class GrilsFragment extends BaseFragment<GrilsPresenter, GrilsModel> impl
         initTitle();
         swipeRefreshLayout.setColorSchemeResources(R.color.colorAccent);
         swipeRefreshLayout.setOnRefreshListener(this);
-        initNewsAdapter();
+        initGrilsAdapter();
     }
 
     @Override
@@ -68,12 +74,34 @@ public class GrilsFragment extends BaseFragment<GrilsPresenter, GrilsModel> impl
         mPresenter.getGrilsListPresenter(pg);
     }
 
-    private void initNewsAdapter() {
+    private void initGrilsAdapter() {
         grilsAdapter = new GrilsAdapter(R.layout.grils_item, list);
         recyclerView.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         recyclerView.setAdapter(grilsAdapter);
         grilsAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_BOTTOM);
         grilsAdapter.setOnLoadMoreListener(this, recyclerView);
+        grilsAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                View picView = view.findViewById(R.id.iv_pic);
+                Grils.ResultsBean bean = grilsAdapter.getData().get(position);
+                transition(bean, picView);
+            }
+        });
+    }
+
+    private void transition(Grils.ResultsBean bean, View view) {
+        ActivityOptionsCompat options;
+        Intent intent = new Intent(getActivity(), GrilsActivity.class);
+        intent.putExtra(AppConstants.GRILS_URL, bean.getUrl());
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            options = ActivityOptionsCompat     //让新的Activity从一个小的范围扩大到全屏
+                    .makeScaleUpAnimation(view, view.getWidth() / 2, view.getHeight() / 2, 0, 0);
+        } else {
+            options = ActivityOptionsCompat.
+                    makeSceneTransitionAnimation(getActivity(), view, getString(R.string.transition_grils));
+        }
+        ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
     }
 
     private void initTitle() {

@@ -1,5 +1,6 @@
 package com.fitem.games.common.helper;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.support.annotation.Nullable;
@@ -9,6 +10,7 @@ import android.widget.ImageView;
 import com.bumptech.glide.load.DataSource;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.load.engine.GlideException;
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions;
 import com.bumptech.glide.request.RequestListener;
 import com.bumptech.glide.request.RequestOptions;
 import com.bumptech.glide.request.target.Target;
@@ -62,8 +64,21 @@ public class GlideHelper {
                         return false;
                     }
                 })
+                .fitCenter()
 //                .crossFade()
                 .dontAnimate()
+                .into(view);
+    }
+
+    // 加载美女详情图片
+    public static void loadGrilsDtlPic(Activity context, String url, ImageView view) {
+        GlideApp.with(context).load(url)
+                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+//                .placeholder(R.mipmap.ic_news_prepare)
+                .error(R.mipmap.ic_news_prepare)
+                .fitCenter()
+                .transition(new DrawableTransitionOptions().crossFade())
+//                .dontAnimate()
                 .into(view);
     }
 

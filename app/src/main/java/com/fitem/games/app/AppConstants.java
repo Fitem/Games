@@ -23,4 +23,5 @@ public class AppConstants {
     public static final String NEWS_ID = "news_id";
     public static final String HTML_IMG_TEMPALE = "<img src=\"http\" />";
     public static final String NEWS_TITLE = "news_title";
+    public static final String GRILS_URL = "grils_url";
 }
