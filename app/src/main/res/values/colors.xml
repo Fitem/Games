@@ -16,4 +16,6 @@
     <color name="black_gray">#201d1d</color>
     <color name="divider">#BDBDBD</color>
     <color name="color_secondary_text">#757575</color>
+    <color name="color_layout_bg">#f3f6f5</color>
+    <color name="color_primary">#00BCD4</color>
 </resources>

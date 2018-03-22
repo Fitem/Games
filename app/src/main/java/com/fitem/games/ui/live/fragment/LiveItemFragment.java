@@ -1,16 +1,23 @@
 package com.fitem.games.ui.live.fragment;
 
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.fitem.games.R;
 import com.fitem.games.app.AppConstants;
 import com.fitem.games.common.base.BaseFragment;
 import com.fitem.games.common.widget.LoadingTip;
+import com.fitem.games.ui.live.activity.LiveDtlActivity;
 import com.fitem.games.ui.live.adapter.LiveListAdapter;
+import com.fitem.games.ui.live.bean.LiveDetail;
 import com.fitem.games.ui.live.bean.LiveItem;
 import com.fitem.games.ui.live.contract.LiveContract;
 import com.fitem.games.ui.live.model.LiveModel;
@@ -78,6 +85,29 @@ public class LiveItemFragment extends BaseFragment<LivePresenter, LiveModel> imp
         recyclerView.setAdapter(liveListAdapter);
         liveListAdapter.openLoadAnimation(BaseQuickAdapter.SCALEIN);
         liveListAdapter.setOnLoadMoreListener(this, recyclerView);
+        liveListAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                LiveItem liveItem = liveListAdapter.getData().get(position);
+                transition(liveItem, view);
+            }
+        });
+    }
+
+    private void transition(LiveItem item, View view) {
+        ActivityOptionsCompat options;
+        Intent intent = new Intent(getActivity(), LiveDtlActivity.class);
+        intent.putExtra(AppConstants.LIVE_TYPE, item.getLive_type());
+        intent.putExtra(AppConstants.LIVE_ID, item.getLive_id());
+        intent.putExtra(AppConstants.GAME_TYPE, item.getGame_type());
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+            options = ActivityOptionsCompat     //让新的Activity从一个小的范围扩大到全屏
+                    .makeScaleUpAnimation(view, view.getWidth() / 2, view.getHeight() / 2, 0, 0);
+        } else {
+            options = ActivityOptionsCompat.
+                    makeSceneTransitionAnimation(getActivity(), view, getString(R.string.transition_live));
+        }
+        ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
     }
 
     @Override
@@ -123,6 +153,11 @@ public class LiveItemFragment extends BaseFragment<LivePresenter, LiveModel> imp
             liveListAdapter.loadMoreComplete();
             offset = liveListAdapter.getData().size();
         }
+    }
+
+    @Override
+    public void returnLiveDetail(LiveDetail detail) {
+
     }
 
     @Override

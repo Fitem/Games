@@ -1,6 +1,7 @@
 package com.fitem.games.ui.live.presenter;
 
 import com.fitem.games.common.baserx.RxSubscriber;
+import com.fitem.games.ui.live.bean.LiveDetail;
 import com.fitem.games.ui.live.bean.LiveItem;
 import com.fitem.games.ui.live.contract.LiveContract;
 
@@ -31,6 +32,26 @@ public class LivePresenter extends LiveContract.Presenter {
                 } else {
                     mView.returnLiveList(null);
                 }
+            }
+
+            @Override
+            public void onSubscribe(Disposable d) {
+                mRxManage.add(d);
+            }
+        });
+    }
+
+    @Override
+    public void getLiveDetailPresenter(String liveType, String liveId, String gameType) {
+        mModel.getLiveDetail(liveType, liveId, gameType).subscribe(new RxSubscriber<LiveDetail>(mContext, false) {
+            @Override
+            protected void _onNext(LiveDetail detail) {
+                mView.returnLiveDetail(detail);
+            }
+
+            @Override
+            protected void _onError(int tag) {
+                mView.showErrorTip(tag);
             }
 
             @Override

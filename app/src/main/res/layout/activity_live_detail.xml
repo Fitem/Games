@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/layout_top"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="4">
+
+        <SurfaceView
+            android:id="@+id/surfaceview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:transitionName="@string/transition_live"
+            android:background="?selectableItemBackgroundBorderless" />
+
+        <FrameLayout
+            android:id="@+id/progressbar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/divider"
+            android:foreground="?selectableItemBackgroundBorderless"
+            android:visibility="gone">
+
+            <ProgressBar
+                style="@style/Widget.AppCompat.ProgressBar"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
+                android:layout_gravity="center"
+                android:padding="10dp" />
+
+        </FrameLayout>
+
+        <master.flame.danmaku.ui.widget.DanmakuView
+            android:id="@+id/danmuview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="?selectableItemBackgroundBorderless" />
+
+        <include
+            layout="@layout/layout_controller_landscape"
+            android:background="?selectableItemBackgroundBorderless"
+            android:visibility="gone" />
+
+        <include
+            layout="@layout/layout_controller_portrait"
+            android:background="?selectableItemBackgroundBorderless" />
+
+    </FrameLayout>
+
+    <LinearLayout
+        android:id="@+id/layout_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:orientation="vertical"
+        android:visibility="visible">
+
+        <com.flyco.tablayout.SlidingTabLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"/>
+
+        <FrameLayout
+            android:id="@+id/layout_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/color_layout_bg" />
+
+    </LinearLayout>
+</LinearLayout>

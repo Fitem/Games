@@ -4,6 +4,7 @@ import android.support.v4.util.ArrayMap;
 
 import com.fitem.games.ui.grils.bean.Grils;
 import com.fitem.games.ui.live.bean.LiveBase;
+import com.fitem.games.ui.live.bean.LiveDetail;
 import com.fitem.games.ui.live.bean.LiveItem;
 import com.fitem.games.ui.news.bean.GNewsDetail;
 import com.fitem.games.ui.news.bean.News;
@@ -46,5 +47,12 @@ public interface ApiService {
             @Query("game_type") String gameType,
             @Query("offset") int offset,
             @Query("limit") int limit
+    );
+
+    @GET("detail")
+    Observable<LiveBase<LiveDetail>> getLiveDetail(
+            @Query("live_type") String liveType,
+            @Query("live_id") String liveId,
+            @Query("game_type") String gameType
     );
 }

@@ -20,4 +20,14 @@
     <string name="hs">炉石传说</string>
     <string name="data2">DOTA2</string>
     <string name="csgo">CSGO</string>
+    <string name="transition_live">transition_live</string>
+    <string name="live_room_name">直播间名称</string>
+    <string name="live_1080p">超清</string>
+    <string name="live_720p">标清</string>
+    <string name="send_danmaku_tip">输入发送弹幕(15字以内)</string>
+    <string name="send">发送</string>
+    <string name="live_360p">普清</string>
+    <string name="danmaku_empty_tip">发送弹幕内容不能为空</string>
+    <string name="danmuka_closed">弹幕已关闭！</string>
+    <string name="danmuka_opened">弹幕已开启！</string>
 </resources>

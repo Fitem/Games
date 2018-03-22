@@ -138,8 +138,4 @@ public class GrilsActivity extends BaseActivity implements PullBackLayout.Callba
         supportFinishAfterTransition();
     }
 
-    @Override
-    public void supportFinishAfterTransition() {
-        super.supportFinishAfterTransition();
-    }
 }

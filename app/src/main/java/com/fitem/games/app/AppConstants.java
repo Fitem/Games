@@ -31,4 +31,6 @@ public class AppConstants {
     public static final String HS = "hs";
     public static final String DATA2 = "data2";
     public static final String CSGO = "csgo";
+    public static final String LIVE_TYPE = "live_type";
+    public static final String LIVE_ID = "live_id";
 }

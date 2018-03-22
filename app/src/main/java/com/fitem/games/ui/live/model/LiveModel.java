@@ -5,6 +5,7 @@ import com.fitem.games.api.HostType;
 import com.fitem.games.app.AppConstants;
 import com.fitem.games.common.baserx.RxSchedulers;
 import com.fitem.games.ui.live.bean.LiveBase;
+import com.fitem.games.ui.live.bean.LiveDetail;
 import com.fitem.games.ui.live.bean.LiveItem;
 import com.fitem.games.ui.live.contract.LiveContract;
 
@@ -28,5 +29,17 @@ public class LiveModel implements LiveContract.Model {
                     }
                 })
                 .compose(RxSchedulers.<List<LiveItem>>io_main());
+    }
+
+    @Override
+    public Observable<LiveDetail> getLiveDetail(String liveType, String liveId, String gameType) {
+        return Api.getDefault(HostType.LIVE_HOST).getLiveDetail(liveType, liveId, gameType)
+                .map(new Function<LiveBase<LiveDetail>, LiveDetail>() {
+                    @Override
+                    public LiveDetail apply(LiveBase<LiveDetail> liveDetailLiveBase) throws Exception {
+                        return liveDetailLiveBase.getResult();
+                    }
+                })
+                .compose(RxSchedulers.<LiveDetail>io_main());
     }
 }
