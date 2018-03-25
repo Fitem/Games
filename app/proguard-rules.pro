@@ -399,6 +399,10 @@
 -dontwarn com.pgyersdk.**
 -keep class com.pgyersdk.** { *; }
 
+# pili
+-keep class com.pili.pldroid.player.** { *; }
+-keep class com.qiniu.qplayer.mediaEngine.MediaPlayer{*;}
+
 # 相当于无混淆
 #  -ignorewarnings
 #  -keep class * {

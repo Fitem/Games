@@ -2,8 +2,6 @@ package com.fitem.games.ui.live.activity;
 
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.os.Handler;
-import android.os.Message;
 import android.os.PowerManager;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
@@ -28,6 +26,8 @@ import com.blankj.utilcode.util.ToastUtils;
 import com.fitem.games.R;
 import com.fitem.games.app.AppConstants;
 import com.fitem.games.common.base.BaseActivity;
+import com.fitem.games.common.baserx.RxSchedulers;
+import com.fitem.games.common.baserx.RxSubscriber;
 import com.fitem.games.common.helper.ToastHelper;
 import com.fitem.games.ui.live.bean.LiveDetail;
 import com.fitem.games.ui.live.bean.LiveItem;
@@ -40,9 +40,12 @@ import com.pili.pldroid.player.PLMediaPlayer;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.OnClick;
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
 import master.flame.danmaku.controller.DrawHandler;
 import master.flame.danmaku.danmaku.model.BaseDanmaku;
 import master.flame.danmaku.danmaku.model.DanmakuTimer;
@@ -102,8 +105,7 @@ public class LiveDtlActivity extends BaseActivity<LivePresenter, LiveModel> impl
     @BindView(R.id.layout_bottom)
     LinearLayout layout_bottom;
 
-    private static final int HANDLER_HIDE_CONTROLLER = 100;//隐藏MediaController
-    private static final int HANDLER_CONTROLLER_DURATION = 5 * 1000;//MediaController显示时间
+    private static final int HANDLER_CONTROLLER_TIME = 5;//MediaController显示时间
     private final String[] indicatorText = new String[]{"聊天", "主播"};
     private final int[] normalResId = new int[]{R.drawable.ic_danmaku_on_normal_dark, R.drawable.ic_avatar_normal};
     private final int[] pressedResId = new int[]{R.drawable.ic_danmaku_on_pressed, R.drawable.ic_avatar_pressed};
@@ -131,7 +133,6 @@ public class LiveDtlActivity extends BaseActivity<LivePresenter, LiveModel> impl
     private int playWidth;
     private int playHeight;
     private List<LiveDetail.StreamListBean> streamList = new ArrayList<>();//直播流列表
-    private Handler controllerHandler;
     private boolean isShowDanmu = false;// 弹幕显示标志位
     private DanmakuContext danmakuContext;
     private int current;
@@ -150,24 +151,11 @@ public class LiveDtlActivity extends BaseActivity<LivePresenter, LiveModel> impl
     @Override
     public void initView() {
         initData();
-        initMedia();
+        initMediaPlayer();
         mPresenter.getLiveDetailPresenter(live_type, live_id, game_type);
     }
 
-    private void initMedia() {
-        controllerHandler = new Handler(new Handler.Callback() {
-            @Override
-            public boolean handleMessage(Message msg) {
-                if (msg.what == HANDLER_HIDE_CONTROLLER) {
-                    //hide controller
-                    layout_landscape.setVisibility(View.GONE);
-                    layout_portrait.setVisibility(View.GONE);
-                    isControllerHiden = true;
-                }
-                return true;
-            }
-        });
-
+    private void initMediaPlayer() {
         /***设置其他View***/
         tv_roomname_landscape.setSelected(true);
 
@@ -197,10 +185,6 @@ public class LiveDtlActivity extends BaseActivity<LivePresenter, LiveModel> impl
                 }
             }
         });
-
-        //MediaController
-        controllerHandler.removeMessages(HANDLER_HIDE_CONTROLLER);
-        controllerHandler.sendEmptyMessageDelayed(HANDLER_HIDE_CONTROLLER, HANDLER_CONTROLLER_DURATION);
 
         et_danmu_landscape.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -246,6 +230,29 @@ public class LiveDtlActivity extends BaseActivity<LivePresenter, LiveModel> impl
         danmakuContext.setDuplicateMergingEnabled(true);//设置合并重复弹幕
         danmuView.prepare(parser, danmakuContext);
 
+    }
+
+    private void handlerController() {
+        Observable.timer(HANDLER_CONTROLLER_TIME, TimeUnit.SECONDS).compose(RxSchedulers.<Long>io_main())
+                .subscribe(new RxSubscriber<Long>(mContext, false) {
+                    @Override
+                    protected void _onNext(Long aLong) {
+                        //hide controller
+                        layout_landscape.setVisibility(View.GONE);
+                        layout_portrait.setVisibility(View.GONE);
+                        isControllerHiden = true;
+                    }
+
+                    @Override
+                    protected void _onError(int tag) {
+                        _onNext(0L);
+                    }
+
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        mRxManager.add(d);
+                    }
+                });
     }
 
     private void initData() {
@@ -334,7 +341,6 @@ public class LiveDtlActivity extends BaseActivity<LivePresenter, LiveModel> impl
             mediaPlayer.setDisplay(surfaceView.getHolder());
             return;
         }
-
         try {
             AVOptions avOptions = new AVOptions();
             avOptions.setInteger(AVOptions.KEY_LIVE_STREAMING, 0);  //直播流：1->是 0->否
@@ -371,7 +377,7 @@ public class LiveDtlActivity extends BaseActivity<LivePresenter, LiveModel> impl
                 public boolean onInfo(PLMediaPlayer plMediaPlayer, int what, int extra) {
                     switch (what) {
                         case PLMediaPlayer.MEDIA_INFO_BUFFERING_START://开始缓冲
-//                isVideoPrepared = false;
+                            isVideoPrepared = false;
                             Log.d("PLMediaPlayer", "onInfo: MEDIA_INFO_BUFFERING_START");
                             break;
                         case PLMediaPlayer.MEDIA_INFO_BUFFERING_END://缓冲结束
@@ -418,7 +424,6 @@ public class LiveDtlActivity extends BaseActivity<LivePresenter, LiveModel> impl
         } catch (Exception e) {
             e.printStackTrace();
         }
-
     }
 
     @OnClick({R.id.surfaceview, R.id.iv_back_landscape, R.id.btn_stream_1080p_landscape, R.id.btn_stream_360p_landscape,
@@ -432,23 +437,19 @@ public class LiveDtlActivity extends BaseActivity<LivePresenter, LiveModel> impl
                     if (isControllerHiden) {//全屏&&隐藏
                         layout_landscape.setVisibility(View.VISIBLE);
                         layout_portrait.setVisibility(View.GONE);
-                        controllerHandler.removeMessages(HANDLER_HIDE_CONTROLLER);
-                        controllerHandler.sendEmptyMessageDelayed(HANDLER_HIDE_CONTROLLER, HANDLER_CONTROLLER_DURATION);
+                        handlerController();
                         isControllerHiden = false;
                     } else if (!isControllerHiden) {//全屏&&显示
-                        controllerHandler.removeMessages(HANDLER_HIDE_CONTROLLER);
-                        controllerHandler.sendEmptyMessage(HANDLER_HIDE_CONTROLLER);
+                        handlerController();
                     }
                 } else if (!isFullscreen) {
                     if (isControllerHiden) {//非全屏&&隐藏
                         layout_landscape.setVisibility(View.GONE);
                         layout_portrait.setVisibility(View.VISIBLE);
-                        controllerHandler.removeMessages(HANDLER_HIDE_CONTROLLER);
-                        controllerHandler.sendEmptyMessageDelayed(HANDLER_HIDE_CONTROLLER, HANDLER_CONTROLLER_DURATION);
+                        handlerController();
                         isControllerHiden = false;
                     } else if (!isControllerHiden) {//非全屏&&显示
-                        controllerHandler.removeMessages(HANDLER_HIDE_CONTROLLER);
-                        controllerHandler.sendEmptyMessage(HANDLER_HIDE_CONTROLLER);
+                        handlerController();
                     }
                 }
                 break;
@@ -460,13 +461,8 @@ public class LiveDtlActivity extends BaseActivity<LivePresenter, LiveModel> impl
 
             //直播流连接切换（超清）
             case R.id.btn_stream_1080p_landscape:
-                controllerHandler.removeMessages(HANDLER_HIDE_CONTROLLER);
-                controllerHandler.sendEmptyMessageDelayed(HANDLER_HIDE_CONTROLLER, HANDLER_CONTROLLER_DURATION);
-                btn_stream_1080p_landscape.setBackground(ContextCompat.getDrawable(this, R.drawable.background_btn_stream_pressed));
-                btn_stream_360p_landscape.setBackground(ContextCompat.getDrawable(this, R.drawable.background_btn_stream_normal));
-                btn_stream_1080p_landscape.setTextColor(ContextCompat.getColor(this, R.color.color_primary));
-                btn_stream_360p_landscape.setTextColor(ContextCompat.getColor(this, R.color.white));
-
+                handlerController();
+                updateLandscapeUI(true);
                 for (LiveDetail.StreamListBean stream : streamList) {
                     if (stream.getType().equals(getString(R.string.live_1080p))) {
                         live_url = stream.getUrl();
@@ -486,12 +482,8 @@ public class LiveDtlActivity extends BaseActivity<LivePresenter, LiveModel> impl
 
             //直播流连接切换（普清）
             case R.id.btn_stream_360p_landscape:
-                controllerHandler.removeMessages(HANDLER_HIDE_CONTROLLER);
-                controllerHandler.sendEmptyMessageDelayed(HANDLER_HIDE_CONTROLLER, HANDLER_CONTROLLER_DURATION);
-                btn_stream_1080p_landscape.setBackground(ContextCompat.getDrawable(this, R.drawable.background_btn_stream_normal));
-                btn_stream_360p_landscape.setBackground(ContextCompat.getDrawable(this, R.drawable.background_btn_stream_pressed));
-                btn_stream_1080p_landscape.setTextColor(ContextCompat.getColor(this, R.color.white));
-                btn_stream_360p_landscape.setTextColor(ContextCompat.getColor(this, R.color.color_primary));
+                handlerController();
+                updateLandscapeUI(false);
 
                 for (LiveDetail.StreamListBean stream :
                         streamList) {
@@ -519,8 +511,7 @@ public class LiveDtlActivity extends BaseActivity<LivePresenter, LiveModel> impl
                     onPause();
                 }
                 iv_play_pause_landscape.setImageResource(isPause ? R.drawable.selector_btn_play : R.drawable.selector_btn_pause);
-                controllerHandler.removeMessages(HANDLER_HIDE_CONTROLLER);
-                controllerHandler.sendEmptyMessageDelayed(HANDLER_HIDE_CONTROLLER, HANDLER_CONTROLLER_DURATION);
+                handlerController();
                 break;
 
             //重新加载
@@ -536,14 +527,12 @@ public class LiveDtlActivity extends BaseActivity<LivePresenter, LiveModel> impl
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                controllerHandler.removeMessages(HANDLER_HIDE_CONTROLLER);
-                controllerHandler.sendEmptyMessageDelayed(HANDLER_HIDE_CONTROLLER, HANDLER_CONTROLLER_DURATION);
+                handlerController();
                 break;
 
             //横屏发送弹幕
             case R.id.btn_send_landscape:
-                controllerHandler.removeMessages(HANDLER_HIDE_CONTROLLER);
-                controllerHandler.sendEmptyMessageDelayed(HANDLER_HIDE_CONTROLLER, HANDLER_CONTROLLER_DURATION);
+                handlerController();
 
                 String danmu = et_danmu_landscape.getText().toString();
                 if (TextUtils.isEmpty(danmu)) {
@@ -569,8 +558,7 @@ public class LiveDtlActivity extends BaseActivity<LivePresenter, LiveModel> impl
                     ToastUtils.showShort(R.string.danmuka_opened);
                 }
 
-                controllerHandler.removeMessages(HANDLER_HIDE_CONTROLLER);
-                controllerHandler.sendEmptyMessageDelayed(HANDLER_HIDE_CONTROLLER, HANDLER_CONTROLLER_DURATION);
+                handlerController();
                 break;
 
             //退出全屏
@@ -597,8 +585,7 @@ public class LiveDtlActivity extends BaseActivity<LivePresenter, LiveModel> impl
                     ToastHelper.showShort(R.string.danmuka_opened);
                 }
 
-                controllerHandler.removeMessages(HANDLER_HIDE_CONTROLLER);
-                controllerHandler.sendEmptyMessageDelayed(HANDLER_HIDE_CONTROLLER, HANDLER_CONTROLLER_DURATION);
+                handlerController();
                 break;
 
             case R.id.iv_fullscreen_portrait://进入全屏
@@ -607,9 +594,22 @@ public class LiveDtlActivity extends BaseActivity<LivePresenter, LiveModel> impl
         }
     }
 
-    //进入全屏
-    private void enterFullscreen() {
+    /**
+     * 更新画质按钮
+     *
+     * @param is1080p
+     */
+    private void updateLandscapeUI(boolean is1080p) {
+        btn_stream_1080p_landscape.setBackground(ContextCompat.getDrawable(this, is1080p ? R.drawable.background_btn_stream_pressed : R.drawable.background_btn_stream_normal));
+        btn_stream_360p_landscape.setBackground(ContextCompat.getDrawable(this, is1080p ? R.drawable.background_btn_stream_normal : R.drawable.background_btn_stream_pressed));
+        btn_stream_1080p_landscape.setTextColor(ContextCompat.getColor(this, is1080p ? R.color.color_primary : R.color.white));
+        btn_stream_360p_landscape.setTextColor(ContextCompat.getColor(this, is1080p ? R.color.white : R.color.color_primary));
+    }
 
+    /**
+     * 进入全屏
+     */
+    private void enterFullscreen() {
         layout_top.removeView(surfaceView);
         layout_top.removeView(progressbar);
         layout_top.removeView(danmuView);
@@ -620,8 +620,7 @@ public class LiveDtlActivity extends BaseActivity<LivePresenter, LiveModel> impl
 
         isFullscreen = true;
         isControllerHiden = false;
-        controllerHandler.removeMessages(HANDLER_HIDE_CONTROLLER);
-        controllerHandler.sendEmptyMessageDelayed(HANDLER_HIDE_CONTROLLER, HANDLER_CONTROLLER_DURATION);
+        handlerController();
 
         layout_top.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         layout_top.addView(progressbar, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -642,9 +641,10 @@ public class LiveDtlActivity extends BaseActivity<LivePresenter, LiveModel> impl
 
     }
 
-    //退出全屏
+    /**
+     * 退出全屏
+     */
     private void exitFullscreen() {
-
         layout_top.removeView(surfaceView);
         layout_top.removeView(progressbar);
         layout_top.removeView(danmuView);
@@ -655,8 +655,7 @@ public class LiveDtlActivity extends BaseActivity<LivePresenter, LiveModel> impl
 
         isFullscreen = false;
         isControllerHiden = false;
-        controllerHandler.removeMessages(HANDLER_HIDE_CONTROLLER);
-        controllerHandler.sendEmptyMessageDelayed(HANDLER_HIDE_CONTROLLER, HANDLER_CONTROLLER_DURATION);
+        handlerController();
 
         layout_top.addView(surfaceView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         layout_top.addView(progressbar, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
@@ -731,16 +730,10 @@ public class LiveDtlActivity extends BaseActivity<LivePresenter, LiveModel> impl
                 }
             }
             if (stream.getType().equals(getString(R.string.live_1080p))) {
-                btn_stream_1080p_landscape.setBackground(ContextCompat.getDrawable(this, R.drawable.background_btn_stream_pressed));
-                btn_stream_360p_landscape.setBackground(ContextCompat.getDrawable(this, R.drawable.background_btn_stream_normal));
-                btn_stream_1080p_landscape.setTextColor(ContextCompat.getColor(this, R.color.color_primary));
-                btn_stream_360p_landscape.setTextColor(ContextCompat.getColor(this, R.color.white));
+                updateLandscapeUI(true);
             }
             if (stream.getType().equals(getString(R.string.live_360p))) {
-                btn_stream_1080p_landscape.setBackground(ContextCompat.getDrawable(this, R.drawable.background_btn_stream_normal));
-                btn_stream_360p_landscape.setBackground(ContextCompat.getDrawable(this, R.drawable.background_btn_stream_pressed));
-                btn_stream_1080p_landscape.setTextColor(ContextCompat.getColor(this, R.color.white));
-                btn_stream_360p_landscape.setTextColor(ContextCompat.getColor(this, R.color.color_primary));
+                updateLandscapeUI(false);
             }
         } catch (NullPointerException e) {
             e.printStackTrace();
@@ -749,6 +742,7 @@ public class LiveDtlActivity extends BaseActivity<LivePresenter, LiveModel> impl
         try {
             mediaPlayer.setDataSource(live_url);//加载直播链接进行播放
             mediaPlayer.prepareAsync();
+            handlerController();
         } catch (IOException e) {
             e.printStackTrace();
         }
