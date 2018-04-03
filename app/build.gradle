@@ -53,25 +53,25 @@ dependencies {
     }
     annotationProcessor rootProject.ext.annotationProcessorLibs
     // butterknife
-    implementation 'com.jakewharton:butterknife:8.8.1'
-    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    implementation "com.jakewharton:butterknife:$rootProject.ext.dependVersion.butterknife"
+    annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.ext.dependVersion.butterknife"
     // 分包
-    implementation 'com.android.support:multidex:1.0.0'
+    implementation "com.android.support:multidex:$rootProject.ext.dependVersion.multidex"
     // utilcode
-    implementation 'com.blankj:utilcode:1.13.4'
+    implementation "com.blankj:utilcode:$rootProject.ext.dependVersion.utilcode"
     // 菜单栏
-    implementation 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
+    implementation "com.flyco.tablayout:FlycoTabLayout_Lib:$rootProject.ext.dependVersion.FlycoTabLayout_Lib"
     // BRVAH
-    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.30'
+    implementation "com.github.CymChad:BaseRecyclerViewAdapterHelper:$rootProject.ext.dependVersion.BRVAH"
     // pgyer
-    implementation 'com.pgyersdk:sdk:2.8.1'
+    implementation "com.pgyersdk:sdk:$rootProject.ext.dependVersion.pgyer"
     // 富文本
-    implementation 'com.zzhoujay.richtext:richtext:3.0.5'
+    implementation "com.zzhoujay.richtext:richtext:$rootProject.ext.dependVersion.richtext"
     // photoView
-    implementation 'com.github.chrisbanes:PhotoView:2.1.3'
+    implementation "com.github.chrisbanes:PhotoView:$rootProject.ext.dependVersion.PhotoView"
     //播放器库
-    compile files('libs/pldroid-player-1.5.0.jar')
-    compile 'com.qiniu:happy-dns:0.2.11'
+    implementation files('libs/pldroid-player-1.5.0.jar')
+    implementation 'com.qiniu:happy-dns:0.2.11'
     //弹幕烈焰使
-    compile 'com.github.ctiao:DanmakuFlameMaster:0.5.4'
+    implementation "com.github.ctiao:DanmakuFlameMaster:$rootProject.ext.dependVersion.DanmakuFlameMaster"
 }
